@@ -11,6 +11,8 @@ app.use(morgan(':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:htt
 app.use(express.json());
 app.use('/',routes);
 
+app.get('/', (req, res) => res.send("da"));
+
 app.listen(3000);
 
 // db.collection("clients").add({
