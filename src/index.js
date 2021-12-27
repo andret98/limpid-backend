@@ -13,7 +13,7 @@ app.use('/',routes);
 
 app.get('/', (req, res) => res.send("da"));
 
-app.listen(5000);
+app.listen(process.env.PORT || 3000);
 
 // db.collection("clients").add({
 //     name : "Andrei",
