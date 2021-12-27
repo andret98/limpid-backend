@@ -1,6 +1,6 @@
 const Router = require('express')();
-const ClientsController = require('./ClientsController.js');
+const UsersController = require('./UsersController.js');
 
-Router.use('/clients', ClientsController);
+Router.use('/users', UsersController);
 
 module.exports = Router;
