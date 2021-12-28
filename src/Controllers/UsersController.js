@@ -237,7 +237,8 @@ Router.post('/myRequests/done', AuthorizationFilter.authorizeRoles(userRoles.HOU
 Router.post('/myRequests/feedback', AuthorizationFilter.authorizeRoles(userRoles.CLIENT) ,async (req, res) => {
     const data = req.body;
 
-    const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
+    const aux = await (await db.collection("requests").where('usernameHousekeeper', '==', data.username).get()).docs[0];
+    console.log(aux)
     
     if(aux != undefined) {
         await db.collection("feedback").add({
