@@ -178,32 +178,28 @@ Router.get('/myRequests', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, u
     }
 });
 
-Router.post('/myRequests', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, userRoles.HOUSEKEEPER) ,async (req, res) => {
+Router.post('/myRequests/cancel', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, userRoles.HOUSEKEEPER) ,async (req, res) => {
     const data = req.body;
-    if(data.response == "ACCEPT") {
-        res.send("ACCEPT")
-    } else if(data.response == "CANCEL") {
-        if(req.user.payload.role == userRoles.CLIENT) {
-            const aux = await (await db.collection("requests").where('usernameHousekeeper', '==', data.username).get()).docs[0];
-            if(aux != undefined) {
-                await db.collection("requests").doc(aux.id).delete()
-                res.send("Request was deleted")
-            } else {
-                res.send("Request not found")
-            }
-        } else if(req.user.payload.role == userRoles.HOUSEKEEPER) {
-            const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
-            if(aux != undefined) {
-                await db.collection("requests").doc(aux.id).delete()
-                res.send("Request was deleted")
-            } else {
-                res.send("Request not found")
-            }
+
+    if(req.user.payload.role == userRoles.CLIENT) {
+        const aux = await (await db.collection("requests").where('usernameHousekeeper', '==', data.username).get()).docs[0];
+        if(aux != undefined) {
+            await db.collection("requests").doc(aux.id).delete()
+            res.send("Request was deleted")
         } else {
-            res.send("You must be logged on an account")
+            res.send("Request not found")
+        }
+    } else if(req.user.payload.role == userRoles.HOUSEKEEPER) {
+        const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
+        if(aux != undefined) {
+            await db.collection("requests").doc(aux.id).delete()
+            res.send("Request was deleted")
+        } else {
+            res.send("Request not found")
         }
     } else {
-        res.send("Not a correct message/token")
+        res.send("You must be logged on an account")
     }
+
 });
 module.exports = Router;
