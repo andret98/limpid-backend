@@ -203,4 +203,19 @@ Router.post('/myRequests/cancel', AuthorizationFilter.authorizeRoles(userRoles.C
     }
 
 });
+
+Router.post('/myRequests/accept', AuthorizationFilter.authorizeRoles(userRoles.HOUSEKEEPER) ,async (req, res) => {
+    const data = req.body;
+
+    const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
+    if(aux != undefined) {
+        await db.collection("requests").doc(aux.id).update({
+            status : "ACCEPTED"
+        })
+        res.send("Request was deleted")
+    } else {
+        res.send("Request not found")
+    }
+
+});
 module.exports = Router;
