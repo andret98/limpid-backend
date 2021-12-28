@@ -233,4 +233,28 @@ Router.post('/myRequests/done', AuthorizationFilter.authorizeRoles(userRoles.HOU
     }
 
 });
+
+Router.post('/myRequests/feedback', AuthorizationFilter.authorizeRoles(userRoles.CLIENT) ,async (req, res) => {
+    const data = req.body;
+
+    const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
+    
+    if(aux != undefined) {
+        await db.collection("feedback").add({
+            usernameClient : aux.data().usernameClient,
+            nameClient : aux.data().nameClient,
+            usernameHousekeeper : aux.data().usernameHousekeeper,
+            nameHousekeeper : aux.data().nameHousekeeper,
+            size : aux.data().size,
+            price : aux.data().price,
+            status : aux.data().status,
+            feedback : data.feedback
+        })
+        await db.collection("requests").doc(aux.id).delete()
+        res.send("Thank you for your feedback")
+    } else {
+        res.send("Request not found")
+    }
+
+});
 module.exports = Router;
