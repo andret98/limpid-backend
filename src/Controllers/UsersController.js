@@ -212,7 +212,22 @@ Router.post('/myRequests/accept', AuthorizationFilter.authorizeRoles(userRoles.H
         await db.collection("requests").doc(aux.id).update({
             status : "ACCEPTED"
         })
-        res.send("Request was deleted")
+        res.send("Request was accepted")
+    } else {
+        res.send("Request not found")
+    }
+
+});
+
+Router.post('/myRequests/done', AuthorizationFilter.authorizeRoles(userRoles.HOUSEKEEPER) ,async (req, res) => {
+    const data = req.body;
+
+    const aux = await (await db.collection("requests").where('usernameClient', '==', data.username).get()).docs[0];
+    if(aux != undefined) {
+        await db.collection("requests").doc(aux.id).update({
+            status : "FINISHED"
+        })
+        res.send("Request was finished")
     } else {
         res.send("Request not found")
     }
