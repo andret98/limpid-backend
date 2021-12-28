@@ -71,6 +71,7 @@ Router.post('/login', async (req, res) => {
         const checkPass = await pass.comparePlainTextToHashedPassword(data.password, aux.data().password)
         if(checkPass) {
             res.send({
+                role : aux.data().role,
                 token : await jwt.generateTokenAsync({role : aux.data().role, username : data.username.toLowerCase()})
             });
         } else {
