@@ -168,7 +168,10 @@ Router.get('/myRequests', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, u
         const aux = await (await db.collection("requests").where('usernameClient', '==', req.user.payload.username).get()).docs;
         const result = [];
         aux.forEach((elem)=>{
-            result.push(elem.data());
+            let e = elem.data();
+            if(e.status == 'PENDING')
+                e.phone = undefined
+            result.push(e);
         })
         res.send(result)
     } else if(req.user.payload.role == userRoles.HOUSEKEEPER) {
