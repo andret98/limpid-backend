@@ -4,6 +4,7 @@ const {
 const authorizeAndExtractTokenAsync = async (req, res, next) => {
     if (!req.headers.authorization) {
         console.log("no token")
+        console.log(req.headers)
         next();
     } else {
         const token = req.headers.authorization.split(" ")[1];
