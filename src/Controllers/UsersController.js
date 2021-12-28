@@ -108,9 +108,12 @@ Router.post('/housekeepers', AuthorizationFilter.authorizeRoles(userRoles.CLIENT
     if(aux != undefined && aux2) {
         await db.collection("requests").add({
             usernameClient : req.user.payload.username,
+            nameClient : data.name,
             usernameHousekeeper : aux.data().username,
+            nameHousekeeper : aux.data().name,
             size : data.size,
-            price : aux.data().price
+            price : aux.data().price,
+            status : "PENDING"
         })
         res.send("Request added with succes")
     } else {
