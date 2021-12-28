@@ -133,12 +133,14 @@ Router.post('/myProfile', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, u
         if(req.user.payload.role == userRoles.CLIENT) {
             const result = await db.collection("users").doc(aux.id).update({
                 name : data.name,
+                phone : data.phone,
                 size : data.size
             })
             res.send("Account was updated")
         } else if(req.user.payload.role == userRoles.HOUSEKEEPER) {
             const result = await db.collection("users").doc(aux.id).update({
                 name : data.name,
+                phone : data.phone,
                 price : data.price
             })
             res.send("Account was updated")
