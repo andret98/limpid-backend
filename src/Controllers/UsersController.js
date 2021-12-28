@@ -42,7 +42,8 @@ Router.post('/register', async (req, res) => {
                     role : data.role,
                     phone : data.phone,
                     name : data.name,
-                    size : data.size
+                    size : data.size,
+                    address : data.address
                 })
             } else {
                 db.collection("users").add({
@@ -141,6 +142,7 @@ Router.post('/myProfile', AuthorizationFilter.authorizeRoles(userRoles.CLIENT, u
             const result = await db.collection("users").doc(aux.id).update({
                 name : data.name,
                 phone : data.phone,
+                address : data.address,
                 size : data.size
             })
             res.send("Account was updated")
@@ -238,7 +240,6 @@ Router.post('/myRequests/feedback', AuthorizationFilter.authorizeRoles(userRoles
     const data = req.body;
 
     const aux = await (await db.collection("requests").where('usernameHousekeeper', '==', data.username).get()).docs[0];
-    console.log(aux)
     
     if(aux != undefined) {
         await db.collection("feedback").add({
