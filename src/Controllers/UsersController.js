@@ -94,6 +94,7 @@ Router.get('/housekeepers', AuthorizationFilter.authorizeRoles(userRoles.CLIENT)
             let aux2 = elem.data();
             aux2.password = undefined;
             aux2.role = undefined;
+            aux2.phone = undefined;
             if(!sentRequest.includes(elem.data().username))
                 result.push(aux2)
         });
@@ -107,7 +108,9 @@ Router.post('/housekeepers', AuthorizationFilter.authorizeRoles(userRoles.CLIENT
     if(aux != undefined && aux2) {
         await db.collection("requests").add({
             usernameClient : req.user.payload.username,
-            usernameHousekeeper : aux.data().username
+            usernameHousekeeper : aux.data().username,
+            size : data.size,
+            price : aux.data().price
         })
         res.send("Request added with succes")
     } else {
