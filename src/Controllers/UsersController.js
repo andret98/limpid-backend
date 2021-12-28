@@ -115,6 +115,7 @@ Router.post('/housekeepers', AuthorizationFilter.authorizeRoles(userRoles.CLIENT
             nameHousekeeper : aux.data().name,
             size : data.size,
             price : aux.data().price,
+            phone : data.phone,
             address : data.address,
             status : "PENDING"
         })
